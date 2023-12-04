@@ -425,7 +425,10 @@ white@ubuntu:~/data/code/riscv-zynq/fpga-zynq/ax7z100$ tree
 阅读手册。实践证明，zybo z7-20板卡也可以使用一下的内存配置（在helloworld demo中）。
 ![](assets/Ubuntu14.04LTS+Vivado2016.2过程记录/image-20231204165503302.png)
 
-完成上述配置后，完成IP间的连线，Validate Design（可能提示需要进行Address Edit，使用自动地址分配就行了），保存block design。
+完成上述配置后，完成IP间的连线，Validate Design（可能提示需要进行Address Edit，右键使用自动地址分配就行了），保存block design。
+
+附上我的Address Edit：
+![](assets/Ubuntu14.04LTS+Vivado2016.2过程记录/image-20231204201929664.png)
 
 ## 重新跑一遍vivado工程
 

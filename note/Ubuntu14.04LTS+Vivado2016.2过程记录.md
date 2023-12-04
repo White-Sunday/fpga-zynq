@@ -35,7 +35,7 @@ INFO: [Common 17-206] Exiting Vivado at Wed Nov 22 06:35:42 2023...
 ### 引擎内存不够
 
 使用建议最大内存（13.4GB）。
-![](assets/Ubuntu14.04LTS+Vivado2016.2过程记录/image-20231123143753526.png)
+![](assets/Ubuntu14.04LTS+Vivado2016.2过程记录/image-20231204165208958.png)
 
 >如果很卡，可以尝试将主机其他运行软件关闭（使得windows系统认为VMware是主要的进程），再打开。
 
@@ -413,7 +413,7 @@ white@ubuntu:~/data/code/riscv-zynq/fpga-zynq/ax7z100$ tree
 这里只需要配置QSPI、Ethernet、SD、UART、USB几个接口。
 
 具体怎么配置，板卡手册都有明确的说明。注意，这里的接口会影响到后面soft_config/zynq_ax7z100.h的修改。
-![](assets/Ubuntu14.04LTS+Vivado2016.2过程记录/image-20231203212341064.png)
+![](assets/Ubuntu14.04LTS+Vivado2016.2过程记录/image-20231204164724782.png)
 
 ### 时钟配置
 
@@ -423,7 +423,7 @@ white@ubuntu:~/data/code/riscv-zynq/fpga-zynq/ax7z100$ tree
 ### DDR内存配置
 
 阅读手册。实践证明，zybo z7-20板卡也可以使用一下的内存配置（在helloworld demo中）。
-![](assets/Ubuntu14.04LTS+Vivado2016.2过程记录/image-20231203212407001.png)
+![](assets/Ubuntu14.04LTS+Vivado2016.2过程记录/image-20231204165503302.png)
 
 完成上述配置后，完成IP间的连线，Validate Design（可能提示需要进行Address Edit，使用自动地址分配就行了），保存block design。
 

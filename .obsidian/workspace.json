@@ -1,0 +1,160 @@
+{
+  "main": {
+    "id": "d87be45bafd731e4",
+    "type": "split",
+    "children": [
+      {
+        "id": "9d34486b20a83818",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "327e956a017ecd1c",
+            "type": "leaf",
+            "state": {
+              "type": "empty",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "cb7b426b17424dc5",
+    "type": "split",
+    "children": [
+      {
+        "id": "0b9b3594b8328ca2",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "16eaa5cccbbaf3bb",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "69f5047b309ae36f",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "70b69614b8e9487a",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "0770fc2e7ad36dbf",
+    "type": "split",
+    "children": [
+      {
+        "id": "7285ed60a73faa88",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "ada4e89023eef2be",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "22327f96125ddbaf",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "7635eb936a6425b2",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              }
+            }
+          },
+          {
+            "id": "84ace7ccf7af00de",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:打开快速切换": false,
+      "graph:查看关系图谱": false,
+      "canvas:新建白板": false,
+      "daily-notes:打开/创建今天的日记": false,
+      "templates:插入模板": false,
+      "command-palette:打开命令面板": false
+    }
+  },
+  "active": "327e956a017ecd1c",
+  "lastOpenFiles": [
+    "README.md",
+    "note/Ubuntu14.04LTS+Vivado2016.2过程记录.md",
+    "note/assets/Ubuntu22.04LTS+Vitis2023.2过程记录（废弃）/image-20231124200023519.png",
+    "note/assets/Ubuntu22.04LTS+Vitis2023.2过程记录（废弃）/image-20231120200909474.png",
+    "note/assets/Ubuntu22.04LTS+Vitis2023.2过程记录（废弃）/image-20231120200717036.png",
+    "note/assets/Ubuntu22.04LTS+Vitis2023.2过程记录（废弃）/image-20231120200252293.png",
+    "note/assets/Ubuntu22.04LTS+Vitis2023.2过程记录（废弃）/image-20231120174846353.png",
+    "note/assets/Ubuntu22.04LTS+Vitis2023.2过程记录（废弃）/image-20231120174719397.png",
+    "note/assets/Ubuntu22.04LTS+Vitis2023.2过程记录（废弃）/image-20231120174649340.png",
+    "note/assets/Ubuntu22.04LTS+Vitis2023.2过程记录（废弃）/image-20231120174554666.png",
+    "note/assets/Ubuntu22.04LTS+Vitis2023.2过程记录（废弃）/image-20231120174507170.png",
+    "note/assets/Ubuntu22.04LTS+Vitis2023.2过程记录（废弃）/image-20231120173356567.png",
+    "note/assets/Ubuntu22.04LTS+Vitis2023.2过程记录（废弃）",
+    "note/assets/Ubuntu14.04LTS+Vivado2016.2过程记录",
+    "note/assets",
+    "note"
+  ]
+}

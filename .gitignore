@@ -38,3 +38,14 @@ zc706/src/verilog/AsyncResetReg.v
 zc706/src/verilog/plusarg_reader.v
 zc706/deliver_output
 zc706/soft_build
+
+ax7z100/ax7z100_rocketchip_*
+ax7z100/src/tcl/ax7z100_rocketchip_*.tcl
+ax7z100/src/tcl/make_bitstream_*.tcl
+ax7z100/src/verilog/rocketchip_wrapper.v
+ax7z100/src/verilog/Top.*.v
+ax7z100/src/verilog/AsyncResetReg.v
+ax7z100/src/verilog/plusarg_reader.v
+ax7z100/deliver_output
+ax7z100/soft_build
+

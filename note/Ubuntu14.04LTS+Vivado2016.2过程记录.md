@@ -659,7 +659,7 @@ Makefile  skeleton.dtsi  system.dts  system.mss  zynq-7000.dtsi
 
 ```
 
-将skeleton.dtsi、system.dts、zynq-7000.dtsi复制到common/u-boot-xlnx/arch/arm/dts目录下，并将system.dts改名为ax7z100_devicetree.dts。
+将skeleton.dtsi、system.dts、zynq-7000.dtsi复制到common/u-boot-xlnx/arch/arm/dts目录下，并将system.dts改名为zynq-ax7z100.dts。
 
 之后修改common/u-boot-xlnx/arch/arm/dts/Makefile，添加一个zynq-ax7z100.dtb。
 
@@ -763,7 +763,12 @@ BOOT.bin  devicetree.dtb  uImage  uramdisk.image.gz
 white@ubuntu:/media/white/9F5E-B7F1$ 
 ```
 
-测试过程中，串口输出有时会卡住，重试三次后成功。
+可以通过screen来监听串口：
+```
+sudo screen /dev/ttyUSB0 115200,cs8,-parenb,-cstopb
+```
+
+测试过程中，串口输出有时会卡住，重试几次后成功。
 
 # 其他
 

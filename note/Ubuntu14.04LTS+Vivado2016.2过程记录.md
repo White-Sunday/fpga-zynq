@@ -412,8 +412,8 @@ white@ubuntu:~/data/code/riscv-zynq/fpga-zynq/ax7z100$ tree
 
 这里只需要配置QSPI、Ethernet、SD、UART、USB几个接口。
 
-具体怎么配置，板卡手册都有明确的说明。注意，这里的接口会影响到后面soft_config/zynq_ax7z100.h的修改。
-![](assets/Ubuntu14.04LTS+Vivado2016.2过程记录/image-20231204164724782.png)
+具体怎么配置，板卡手册都有明确的说明。注意，这里的接口会影响到后面soft_config/zynq_ax7z100.h的修改（我的板卡bank1需要设置成1.8V）。
+![](assets/Ubuntu14.04LTS+Vivado2016.2过程记录/image-20231205193105917.png)
 
 ### 时钟配置
 
@@ -422,7 +422,7 @@ white@ubuntu:~/data/code/riscv-zynq/fpga-zynq/ax7z100$ tree
 
 ### DDR内存配置
 
-阅读手册。实践证明，zybo z7-20板卡也可以使用一下的内存配置（在helloworld demo中）。
+阅读手册，选择DDR3的MT41J256M16 RE-125。如果使用的是zybo z7-20板卡，实践证明，内存可以选择DDR3L的MT41K256M16 RE-125（在helloworld demo中）。
 ![](assets/Ubuntu14.04LTS+Vivado2016.2过程记录/image-20231204165503302.png)
 
 完成上述配置后，完成IP间的连线，Validate Design（可能提示需要进行Address Edit，右键使用自动地址分配就行了），保存block design。

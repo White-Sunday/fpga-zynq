@@ -392,9 +392,9 @@ white@ubuntu:~/data/code/riscv-zynq/fpga-zynq/ax7z100$ tree
 
 ```
 
-# make vivado
+## make vivado
 
-## Block Design
+### Block Design
 
 > 如果对自己的板卡还不熟悉，可以跑一遍手册的Demo（如果有的话，一般都有helloworld）。
 
@@ -403,24 +403,24 @@ white@ubuntu:~/data/code/riscv-zynq/fpga-zynq/ax7z100$ tree
 
 图中的AXI Interconnect和Processor System Reset都是用的Xilinx提供的IP核，不需要修改。ZYNQ7 Processing System这个IP需要基于自己的板卡进行配置，将其删除，新建一个，再阅读ax7z100手册，进行配置：
 
-### 分配S AXI HP0接口
+#### 分配S AXI HP0接口
 
 这个接口是提供给RISC-V核的，RISC-V核可以通过该接口来访问PS端的DDR内存。
 ![](assets/Ubuntu14.04LTS+Vivado2016.2过程记录/image-20231203212329245.png)
 
-### 配置MIO
+#### 配置MIO
 
 这里只需要配置QSPI、Ethernet、SD、UART、USB几个接口。
 
 具体怎么配置，板卡手册都有明确的说明。注意，这里的接口会影响到后面soft_config/zynq_ax7z100.h的修改（我的板卡bank1需要设置成1.8V）。
 ![](assets/Ubuntu14.04LTS+Vivado2016.2过程记录/image-20231205193105917.png)
 
-### 时钟配置
+#### 时钟配置
 
 查阅自己的手册。这里配置的PS端参考时钟以及PS时钟产生器提供上述分配MIO接口的时钟。
 ![](assets/Ubuntu14.04LTS+Vivado2016.2过程记录/image-20231203212353739.png)
 
-### DDR内存配置
+#### DDR内存配置
 
 阅读手册，选择DDR3的MT41J256M16 RE-125。如果使用的是zybo z7-20板卡，实践证明，内存可以选择DDR3L的MT41K256M16 RE-125（在helloworld demo中）。
 ![](assets/Ubuntu14.04LTS+Vivado2016.2过程记录/image-20231204165503302.png)
@@ -430,7 +430,7 @@ white@ubuntu:~/data/code/riscv-zynq/fpga-zynq/ax7z100$ tree
 附上我的Address Edit：
 ![](assets/Ubuntu14.04LTS+Vivado2016.2过程记录/image-20231204201929664.png)
 
-## 重新跑一遍vivado工程
+### 重新跑一遍vivado工程
 
 保存block design后，重新跑一遍vivado工程。
 
@@ -442,7 +442,7 @@ white@ubuntu:~/data/code/riscv-zynq/fpga-zynq/ax7z100$ tree
 
 之后就可以按照github的README.md一步步走了。
 
-## Build FSBL
+### Build FSBL
 
 File>New>Application Project，next
 ![](assets/Ubuntu14.04LTS+Vivado2016.2过程记录/image-20231203212445138.png)
@@ -519,7 +519,7 @@ make[1]: Leaving directory `/home/white/data/code/riscv-zynq/fpga-zynq/ax7z100/a
 08:40:32 Build Finished (took 112ms)
 ```
 
-## 生成设备树文件（以zybo z7-20为例）
+### 生成设备树文件（以zybo z7-20为例）
 
 参考博客：[https://blog.csdn.net/ryuuei_1984/article/details/52367444](https://blog.csdn.net/ryuuei_1984/article/details/52367444)
 
@@ -669,7 +669,7 @@ ax7z100/soft_config/ax7z100_config.h其实会经由make arm-uboot复制到u-boot
 
 至此u-boot有关配置已经结束，可以make arm-uboot制作真正有用的uboot.elf了。
 
-# Create BOOT.bin
+## Create BOOT.bin
 
 Xilinx SDK里，Xilinx Tools -> Create Zynq Boot Image（找不到可以在Quick Access里搜索Create Boot Image）
 
@@ -693,7 +693,7 @@ BOOT.bin  output.bif
 
 ```
 
-# Build Linux
+## Build Linux
 
 ### make arm-linux
 
@@ -732,7 +732,9 @@ export PATH=/home/white/data/code/riscv-zynq/fpga-zynq/common/linux-xlnx/scripts
 
 ### make fetch-ramdisk
 
-执行make fetch-ramdisk ：
+make fetch-ramdisk没用，需要自己去找[ZC706](https://github.com/ucb-bar/fpga-images-zc706/blob/71d3462105b646ec4985c3d3442fc1103dff8f2a/uramdisk.image.gz)那里找到下载下来。
+
+如果执行make fetch-ramdisk ：
 ```Bash
 white@ubuntu:~/data/code/riscv-zynq/fpga-zynq/ax7z100$ make fetch-ramdisk 
 mkdir -p deliver_output
@@ -743,7 +745,16 @@ curl https://s3-us-west-1.amazonaws.com/riscv.org/fpga-zynq-files/uramdisk.image
 
 ```
 
-# 上板测试
+上板测试后，出现问题：
+```
+Wrong Ramdisk Image Format
+Ramdisk image is corrupt or invalid
+```
+
+检查后发现，所谓根文件系统只有435字节大小，而这435字节大小的内容就是：
+![](assets/Ubuntu14.04LTS+Vivado2016.2过程记录/image-20231213204827819.png)
+
+## 上板测试
 
 现在SD卡启动需要的文件都准备好了：
 ```Bash
@@ -763,12 +774,57 @@ BOOT.bin  devicetree.dtb  uImage  uramdisk.image.gz
 white@ubuntu:/media/white/9F5E-B7F1$ 
 ```
 
+## screen等串口工具
+
 可以通过screen来监听串口：
 ```
 sudo screen /dev/ttyUSB0 115200,cs8,-parenb,-cstopb
 ```
 
-测试过程中，串口输出有时会卡住，重试几次后成功。
+## ssh
+
+直接ssh访问出现问题：
+```shell
+white@white-Legion-Y9000P-IAH7H:~$ ssh root@192.168.1.5
+Unable to negotiate with 192.168.1.5 port 22: no matching key exchange method found. Their offer: diffie-hellman-group1-sha1,diffie-hellman-group14-sha1
+```
+
+参考： https://zhuanlan.zhihu.com/p/30840210
+这是使用ssh登录旧设备导致的。
+结果过程如下：
+```shell
+white@white-Legion-Y9000P-IAH7H:~$ ssh root@192.168.1.5
+Unable to negotiate with 192.168.1.5 port 22: no matching key exchange method found. Their offer: diffie-hellman-group1-sha1,diffie-hellman-group14-sha1
+white@white-Legion-Y9000P-IAH7H:~$ ssh root@192.168.1.5 -oKexAlgorithms=+diffie-hellman-group1-sha1
+Unable to negotiate with 192.168.1.5 port 22: no matching host key type found. Their offer: ssh-rsa
+white@white-Legion-Y9000P-IAH7H:~$ ssh root@192.168.1.5 -oKexAlgorithms=+diffie-hellman-group1-sha1 -oHostKeyAlgorithms=+ssh-rsa
+The authenticity of host '192.168.1.5 (192.168.1.5)' can't be established.
+RSA key fingerprint is SHA256:syF3+kQzoxHwyAoDy5l7cRy+9dHmMPWb71mqjw710Y0.
+This key is not known by any other names
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added '192.168.1.5' (RSA) to the list of known hosts.
+root@192.168.1.5's password: 
+root@zynq:~# 
+root@zynq:~# exit
+logout
+Connection to 192.168.1.5 closed.
+
+```
+
+- 提示no matching key exchange method found，就使用-oKexAlgorithms=+加上给出的对应提示。
+- 提示no matching host key type found，就使用-oHostKeyAlgorithms=+加上给出的对应提示。
+
+## 启动 RISC-V Rocket Core 并与其交互
+
+出现问题：
+```shell
+root@zynq:~# ./fesvr-zynq pk hello
+ERROR: No cores found
+root@zynq:~# ./fesvr-zynq bbl     
+ERROR: No cores found
+```
+
+正在参考： https://github.com/ucb-bar/fpga-zynq/issues/87
 
 # 其他
 

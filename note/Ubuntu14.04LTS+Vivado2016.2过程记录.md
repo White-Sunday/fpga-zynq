@@ -732,7 +732,10 @@ export PATH=/home/white/data/code/riscv-zynq/fpga-zynq/common/linux-xlnx/scripts
 
 ### make fetch-ramdisk
 
-make fetch-ramdisk没用，需要自己去找[ZC706](https://github.com/ucb-bar/fpga-images-zc706/blob/71d3462105b646ec4985c3d3442fc1103dff8f2a/uramdisk.image.gz)那里找到下载下来。
+make fetch-ramdisk没用，需要自己去[ucb-bar/fpga-images-zedboard at e85e4b06debd2c0fe07e07812468d81180056b7b (github.com)](https://github.com/ucb-bar/fpga-images-zedboard/tree/e85e4b06debd2c0fe07e07812468d81180056b7b)找到下载下来。这里直接使用zedboard仓库下根文件系统镜像。zc706的跟文件系统镜像（zybo的根文件系统镜像与zc706的一样大，估计存在相同的问题）实践证明有问题，无法启动运行在riscv核上的前端服务器fesvr。
+
+参考：[fpga-pynq: 在pynq-z1上实现RISC-V处理器Rocket-Chip，并在其上添加各种外设。 (gitee.com)](https://gitee.com/hustos/fpga-pynq)
+虽然我的板卡AX7Z100没有出现根文件系统镜像大小引发的问题，但是某些板卡可能需要将根文件系统镜像裁剪到10MB大小以下才能正常启动。
 
 如果执行make fetch-ramdisk ：
 ```Bash
@@ -781,7 +784,11 @@ white@ubuntu:/media/white/9F5E-B7F1$
 sudo screen /dev/ttyUSB0 115200,cs8,-parenb,-cstopb
 ```
 
+**登录所需的账号密码都是root。**
+
 ## ssh
+
+> 注：需要提前将电脑有线网卡IP地址设置为192.168.1.\*（0<\*<256且不为5），即和192.168.1.5同一网段且不为192.168.1.5，子网掩码设置为255.255.255.0。
 
 直接ssh访问出现问题：
 ```shell
@@ -816,7 +823,9 @@ Connection to 192.168.1.5 closed.
 
 ## 启动 RISC-V Rocket Core 并与其交互
 
-出现问题：
+有关RISCV核上Linux启动有关的知识，可以阅读：[关于risc-v启动部分思考-腾讯云开发者社区-腾讯云 (tencent.com)](https://cloud.tencent.com/developer/article/1764021?spm=wolai.workspace.0.0.5b061c59MXq5N0)
+
+直接使用zc706仓库的根文件系统镜像出现该问题：
 ```shell
 root@zynq:~# ./fesvr-zynq pk hello
 ERROR: No cores found
@@ -824,7 +833,94 @@ root@zynq:~# ./fesvr-zynq bbl
 ERROR: No cores found
 ```
 
-正在参考： https://github.com/ucb-bar/fpga-zynq/issues/87
+参考： https://github.com/ucb-bar/fpga-zynq/issues/87
+替换成zedboard仓库的根文件系统镜像。
+
+在RISCV核上跑一个裸机hello程序：
+```shell
+root@zynq:~# ./fesvr-zynq pk hello
+hello!
+```
+
+在RISCV核上启一个linux系统：
+```shell
+root@zynq:~# ./fesvr-zynq +blkdev=buildroot.rootfs.ext2 bbl
+              vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+                  vvvvvvvvvvvvvvvvvvvvvvvvvvvv
+rrrrrrrrrrrrr       vvvvvvvvvvvvvvvvvvvvvvvvvv
+rrrrrrrrrrrrrrrr      vvvvvvvvvvvvvvvvvvvvvvvv
+rrrrrrrrrrrrrrrrrr    vvvvvvvvvvvvvvvvvvvvvvvv
+rrrrrrrrrrrrrrrrrr    vvvvvvvvvvvvvvvvvvvvvvvv
+rrrrrrrrrrrrrrrrrr    vvvvvvvvvvvvvvvvvvvvvvvv
+rrrrrrrrrrrrrrrr      vvvvvvvvvvvvvvvvvvvvvv
+rrrrrrrrrrrrr       vvvvvvvvvvvvvvvvvvvvvv
+rr                vvvvvvvvvvvvvvvvvvvvvv
+rr            vvvvvvvvvvvvvvvvvvvvvvvv      rr
+rrrr      vvvvvvvvvvvvvvvvvvvvvvvvvv      rrrr
+rrrrrr      vvvvvvvvvvvvvvvvvvvvvv      rrrrrr
+rrrrrrrr      vvvvvvvvvvvvvvvvvv      rrrrrrrr
+rrrrrrrrrr      vvvvvvvvvvvvvv      rrrrrrrrrr
+rrrrrrrrrrrr      vvvvvvvvvv      rrrrrrrrrrrr
+rrrrrrrrrrrrrr      vvvvvv      rrrrrrrrrrrrrr
+rrrrrrrrrrrrrrrr      vv      rrrrrrrrrrrrrrrr
+rrrrrrrrrrrrrrrrrr          rrrrrrrrrrrrrrrrrr
+rrrrrrrrrrrrrrrrrrrr      rrrrrrrrrrrrrrrrrrrr
+rrrrrrrrrrrrrrrrrrrrrr  rrrrrrrrrrrrrrrrrrrrrr
+
+       INSTRUCTION SETS WANT TO BE FREE
+...
+Welcome to Buildroot
+buildroot login: root
+Password:
+```
+
+这里不知道root密码。
+参考：[Password not working · Issue #105 · ucb-bar/fpga-zynq (github.com)](https://github.com/ucb-bar/fpga-zynq/issues/105?spm=wolai.workspace.0.0.5b061c59MXq5N0)
+
+(1) `cd fpga-zynq/zedboard`
+```shell
+white@ubuntu:~/data/code/riscv-zynq/fpga-zynq/zedboard$
+```
+
+(2) `make ramdisk-open` 
+```shell
+white@ubuntu:~/data/code/riscv-zynq/fpga-zynq/zedboard$ make ramdisk-open
+```
+
+如果网络原因导致`git submodule update --init --depth=1 fpga-images-zedboard`失败，可以手动执行git。
+
+(3) `mount -t ext2 ramdisk/home/root/buildroot.rootfs.ext2 /somefolder` 挂载 RISC-V 文件系统镜像。这里的/somefolder代表挂载目录，我在实践中使用 /mnt/somefolder为我的挂载目录。
+```shell
+white@ubuntu:~/data/code/riscv-zynq/fpga-zynq/zedboard$ sudo mount -t ext2 ramdisk/home/root/buildroot.rootfs.ext2 /mnt/somefolder
+```
+
+(4) 修改 /somefolder/etc/shadow 。 更改 root用户的password hash 为 `$1$2CMKSo57$U.FHm8zmyfTa8X/LTHx8o0`，对应root，这样就可以将密码设置为root了。  
+
+> 通过观察可以发现这里使用的是MD5加密（`$1$`起头）。这类用于加密的哈希算法理论上是不可逆的，所以很难通过原值反推原始密码，最方便的方法就是自己重新设置。
+
+(5) `umount /somefolder` 
+
+(6) `make ramdisk-close` 
+```shell
+white@ubuntu:~/data/code/riscv-zynq/fpga-zynq/zedboard$ make ramdisk-close
+```
+
+出现错误：
+```shell
+/bin/bash: mkimage: command not found
+```
+
+参考：[编译内核提示mkimage command not found – U-Boot images will not be built-CSDN博客](https://blog.csdn.net/eibo51/article/details/51901480?spm=wolai.workspace.0.0.5b061c59MXq5N0)
+安装u-boot-tools即可。
+```shell
+sudo apt-get install u-boot-tools
+```
+
+成功登录RISCV核上的Linux，可以查看其系统内核。
+```shell
+# uname -a
+Linux buildroot 4.15.0-rc6-01961-gc48c452-dirty #231 SMP Wed Jan 24 13:31:10 PST 2018 riscv64 GNU/Linux
+```
 
 # 其他
 
